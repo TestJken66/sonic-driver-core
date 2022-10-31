@@ -22,9 +22,9 @@ import com.alibaba.fastjson2.JSON;
 import org.cloud.sonic.driver.android.service.AndroidElement;
 import org.cloud.sonic.driver.android.service.UiaClient;
 import org.cloud.sonic.driver.common.models.BaseResp;
+import org.cloud.sonic.driver.common.models.ElementRect;
 import org.cloud.sonic.driver.common.tool.Logger;
 import org.cloud.sonic.driver.common.tool.SonicRespException;
-import org.cloud.sonic.driver.common.models.ElementRect;
 
 import java.util.Base64;
 
@@ -42,6 +42,8 @@ public class AndroidElementImpl implements AndroidElement {
     @Override
     public void click() throws SonicRespException {
         uiaClient.checkSessionId();
+        // 点击某些ID
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/element/{id}/click
         BaseResp b = uiaClient.getRespHandler().getResp(
                 HttpUtil.createPost(uiaClient.getRemoteUrl() + "/wd/hub/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/click"));
@@ -64,6 +66,8 @@ public class AndroidElementImpl implements AndroidElement {
         JSONObject data = new JSONObject();
         data.put("text", text);
         data.put("replace", isCover);
+         // 发送keyevent事件
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/element/{id}/value
         BaseResp b = uiaClient.getRespHandler().getResp(
                 HttpUtil.createPost(uiaClient.getRemoteUrl() + "/wd/hub/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/value")
@@ -79,6 +83,7 @@ public class AndroidElementImpl implements AndroidElement {
     @Override
     public void clear() throws SonicRespException {
         uiaClient.checkSessionId();
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/element/{id}/clear
         BaseResp b = uiaClient.getRespHandler().getResp(
                 HttpUtil.createPost(uiaClient.getRemoteUrl() + "/wd/hub/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/clear"), 60000);
@@ -93,6 +98,8 @@ public class AndroidElementImpl implements AndroidElement {
     @Override
     public String getText() throws SonicRespException {
         uiaClient.checkSessionId();
+        // 获取字符串
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/element/{id}/text
         BaseResp b = uiaClient.getRespHandler().getResp(
                 HttpUtil.createGet(uiaClient.getRemoteUrl() + "/wd/hub/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/text"));
@@ -108,6 +115,8 @@ public class AndroidElementImpl implements AndroidElement {
     @Override
     public String getAttribute(String name) throws SonicRespException {
         uiaClient.checkSessionId();
+        // 获取属性
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/element/{id}/attribute/{name}
         BaseResp b = uiaClient.getRespHandler().getResp(
                 HttpUtil.createGet(uiaClient.getRemoteUrl() + "/wd/hub/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/attribute/" + name));
@@ -123,6 +132,7 @@ public class AndroidElementImpl implements AndroidElement {
     @Override
     public ElementRect getRect() throws SonicRespException {
         uiaClient.checkSessionId();
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/element/{id}/rect
         BaseResp b = uiaClient.getRespHandler().getResp(
                 HttpUtil.createGet(uiaClient.getRemoteUrl() + "/wd/hub/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/rect"));
@@ -139,6 +149,7 @@ public class AndroidElementImpl implements AndroidElement {
     @Override
     public byte[] screenshot() throws SonicRespException {
         uiaClient.checkSessionId();
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/element/{id}/screenshot
         BaseResp b = uiaClient.getRespHandler().getResp(
                 HttpUtil.createGet(uiaClient.getRemoteUrl() + "/wd/hub/session/"
                         + uiaClient.getSessionId() + "/element/" + id + "/screenshot"), 60000);

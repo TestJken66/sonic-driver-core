@@ -121,6 +121,7 @@ public class UiaClientImpl implements UiaClient {
     public void newSession(JSONObject capabilities) throws SonicRespException {
         JSONObject data = new JSONObject();
         data.put("capabilities", capabilities);
+        // android 请求: http://localhost:8100/wd/hub/session
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session").body(data.toJSONString()));
         if (b.getErr() == null) {
             SessionInfo sessionInfo = JSON.parseObject(b.getValue().toString(), SessionInfo.class);
@@ -137,6 +138,7 @@ public class UiaClientImpl implements UiaClient {
     @Override
     public void closeSession() throws SonicRespException {
         checkSessionId();
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}
         respHandler.getResp(HttpUtil.createRequest(Method.DELETE, remoteUrl + "/wd/hub/session/" + sessionId));
         logger.info("close session successful!");
     }
@@ -153,6 +155,7 @@ public class UiaClientImpl implements UiaClient {
     public WindowSize getWindowSize() throws SonicRespException {
         if (size == null) {
             checkSessionId();
+            // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/window/:windowHandle/size
             BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/wd/hub/session/" + sessionId + "/window/:windowHandle/size"));
             if (b.getErr() == null) {
                 size = JSON.parseObject(b.getValue().toString(), WindowSize.class);
@@ -171,6 +174,7 @@ public class UiaClientImpl implements UiaClient {
         JSONObject data = new JSONObject();
         data.put("text", text);
         data.put("replace", isCover);
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/keys
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/keys")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
@@ -187,6 +191,8 @@ public class UiaClientImpl implements UiaClient {
         JSONObject data = new JSONObject();
         data.put("contentType", contentType.toUpperCase(Locale.ROOT));
         data.put("content", Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8)));
+        // 设置剪切板
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/appium/device/set_clipboard
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/appium/device/set_clipboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
@@ -202,6 +208,8 @@ public class UiaClientImpl implements UiaClient {
         checkSessionId();
         JSONObject data = new JSONObject();
         data.put("contentType", contentType.toUpperCase(Locale.ROOT));
+        // 获取剪切板
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/appium/device/get_clipboard
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/appium/device/get_clipboard")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
@@ -217,6 +225,7 @@ public class UiaClientImpl implements UiaClient {
     @Override
     public String pageSource() throws SonicRespException {
         checkSessionId();
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/source
         BaseResp b = respHandler.getResp(HttpUtil.createGet(remoteUrl + "/wd/hub/session/" + sessionId + "/source"), 60000);
         if (b.getErr() == null) {
             logger.info("get page source.");
@@ -250,6 +259,7 @@ public class UiaClientImpl implements UiaClient {
             JSONObject data = new JSONObject();
             data.put("strategy", selector);
             data.put("selector", value);
+            // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/element
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/element")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
@@ -292,6 +302,7 @@ public class UiaClientImpl implements UiaClient {
             JSONObject data = new JSONObject();
             data.put("strategy", selector);
             data.put("selector", value);
+            // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/elements
             BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/elements")
                     .body(data.toJSONString()));
             if (b.getErr() == null) {
@@ -328,6 +339,7 @@ public class UiaClientImpl implements UiaClient {
     @Override
     public byte[] screenshot() throws SonicRespException {
         checkSessionId();
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/screenshot
         BaseResp b = respHandler.getResp(
                 HttpUtil.createGet(remoteUrl + "/wd/hub/session/" + sessionId + "/screenshot"), 60000);
         if (b.getErr() == null) {
@@ -344,6 +356,7 @@ public class UiaClientImpl implements UiaClient {
         checkSessionId();
         JSONObject data = new JSONObject();
         data.put("settings", settings);
+        // android 请求: http://localhost:8100/wd/hub/session/{sessionId}/appium/settings
         BaseResp b = respHandler.getResp(HttpUtil.createPost(remoteUrl + "/wd/hub/session/" + sessionId + "/appium/settings")
                 .body(data.toJSONString()));
         if (b.getErr() == null) {
